@@ -38,6 +38,36 @@ module.exports = function(app){
 		});
 	};
 
+	//GET - Return places by params request
+	findByParams = function(req, res){
+		console.log('GET - /place?');
+
+		//componemos la query de busqueda
+
+		var query = Place.find({});
+
+		if (req.query.name != null)	query.where('name', req.query.name);
+		if (req.query.city != null)	query.where('city', req.query.city);
+		if (req.query.latitude != null)	query.where('latitude', req.query.latitude);
+		if (req.query.longitude != null)	query.where('longitude', req.query.longitude);
+		//query.limit(5);
+		//query.skip(100);
+
+		return query.exec(function (err, place) {
+		  if (!place){
+				res.statusCode=204;
+				return res.send({ error:'Not found'});
+			}
+			if (!err){
+				return res.send({status:'OK', place:place});
+			}else{
+				res.statusCode = 500;
+				console.log('Internal error (%d): %s', res.statusCode, err.message);
+				return res.send({error:'Server error'});
+			}
+		});
+	};
+
 	//POST - Add a new place
 	addPlace = function(req, res){		
 		console.log('POST - /place');
@@ -125,6 +155,7 @@ module.exports = function(app){
 	//Link routes and functions
 	app.get( 	'/places'		, findAllPlaces);
 	app.get( 	'/place/:id'	, findById);
+	app.get( 	'/place?'		, findByParams);
 	app.post(	'/place'		, addPlace);
 	app.put( 	'/place/:id'	, updatePlace);
 	app.delete(	'/place/:id'	, deletePlace);

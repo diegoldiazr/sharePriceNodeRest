@@ -38,6 +38,35 @@ module.exports = function(app){
 		});
 	};
 
+	//GET - Return products by params request
+	findByParams = function(req, res){
+		console.log('GET - /product?');
+
+		//componemos la query de busqueda
+
+		var query = Product.find({});
+
+		if (req.query.name != null)	query.where('name', req.query.name);
+		if (req.query.category != null)	query.where('category', req.query.category);
+		if (req.query.barcode != null)	query.where('barcode', req.query.barcode);
+		//query.limit(5);
+		//query.skip(100);
+
+		return query.exec(function (err, product) {
+		  if (!product){
+				res.statusCode=204;
+				return res.send({ error:'Not found'});
+			}
+			if (!err){
+				return res.send({status:'OK', product:product});
+			}else{
+				res.statusCode = 500;
+				console.log('Internal error (%d): %s', res.statusCode, err.message);
+				return res.send({error:'Server error'});
+			}
+		});
+	};
+
 	//POST - Add a new product
 	addProduct = function(req, res){		
 		console.log('POST - /product');
@@ -121,6 +150,7 @@ module.exports = function(app){
 	//Link routes and functions
 	app.get( 	'/products'		, findAllProducts);
 	app.get( 	'/product/:id'	, findByIdProduct);
+	app.get( 	'/product?'		, findByParams);
 	app.post(	'/product'		, addProduct);
 	app.put( 	'/product/:id'	, updateProduct);
 	app.delete(	'/product/:id'	, deleteProduct);

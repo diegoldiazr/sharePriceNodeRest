@@ -66,7 +66,9 @@ module.exports = function(app){
 			fullname	: req.body.fullname,
 			image		: req.body.image,
 			email		: req.body.email,
-			points	 	: req.body.points
+			points	 	: req.body.points,
+			state		: req.body.state,
+			rol			: req.body.rol
 		});
 
 		return user.save(function(err){
@@ -99,6 +101,8 @@ module.exports = function(app){
 			if (req.body.image != null) user.image = req.body.image;
 			if (req.body.email != null) user.email = req.body.email;
 			if (req.body.points != null) user.points = req.body.points;
+			if (req.body.state != null) user.state = req.body.state;
+			if (req.body.rol != null) user.rol = req.body.rol;
 
 			return user.save(function(err){
 				if (!err){
@@ -141,11 +145,11 @@ module.exports = function(app){
 	};
 
 	//Link routes and functions
-	app.get( 	'/users'	, findAllUsers);
-	app.get( 	'/user/:id'	, findById);
+	app.get( 	'/users'			, findAllUsers);
+	app.get( 	'/user/:id'			, findById);
 	app.get( 	'/user?:username'	, findByUserName);
-	app.post(	'/user'		, addUser);
-	app.put( 	'/user/:id'	, updateUser);
-	app.delete(	'/user/:id'	, deleteUser);
+	app.post(	'/user'				, addUser);
+	app.put( 	'/user/:id'			, updateUser);
+	app.delete(	'/user/:id'			, deleteUser);
 
 }

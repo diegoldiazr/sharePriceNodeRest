@@ -18,6 +18,7 @@ app.configure(function () {
 routes = require('./routes/products')(app);
 routes = require('./routes/places')(app);
 routes = require('./routes/users')(app);
+routes = require('./routes/prices')(app);
 
 // conexion a la bd
 mongoose.connect('mongodb://localhost/sharepricedb', function(err, res){

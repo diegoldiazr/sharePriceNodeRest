@@ -17,7 +17,9 @@ var User = new Schema({
 	fullname : {type:String},
 	image : [Image],
 	email : {type:String},
-	points : {type:Number}
+	points : {type:Number},
+	state : {type:Number}, //status 0 es activo, 1 inactivo, 2 pendiente de confirmacion de email
+	rol : {type:Number, required:true} //rol 0 admin, 1 user
 });
 
 module.exports = mongoose.model('User', User);
